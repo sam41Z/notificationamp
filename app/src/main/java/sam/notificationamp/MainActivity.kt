@@ -126,7 +126,7 @@ class MainActivity : PreferenceActivity() {
                     preference.setSummary(R.string.pref_ringtone_silent)
 
                 } else if (stringValue == "car_alarm") {
-                    preference.setSummary("\uD83D\uDE97-port alarm")
+                    preference.setSummary("\uD83D\uDE97\uD83D\uDE97\uD83D\uDE97\uD83D\uDE97\uD83D\uDE97")
                 } else {
                     val ringtone = RingtoneManager.getRingtone(
                             preference.getContext(), Uri.parse(stringValue))
