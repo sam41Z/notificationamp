@@ -89,7 +89,7 @@ class MainActivity : PreferenceActivity() {
             val notification = Notification.Builder(activity, channelId)
                     .setContentTitle("Test")
                     .setContentText("Test")
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.drawable.ic_postauto_sign)
                     .setAutoCancel(true)
                     .build()
             notificationManager.notify(2, notification)

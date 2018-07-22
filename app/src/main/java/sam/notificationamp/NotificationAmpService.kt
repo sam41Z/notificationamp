@@ -89,7 +89,7 @@ class NotificationAmpService : NotificationListenerService() {
         val notification = Notification.Builder(this@NotificationAmpService, channelId)
                 .setContentTitle("Alarm")
                 .setContentText("Alarm")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_postauto_sign)
                 .setAutoCancel(true)
                 .setContentIntent(pendingStopIntent)
                 .setDeleteIntent(pendingStopIntent)
