@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto">
+
+  <sam.notificationamp.preferences.ButtonPreference
+    android:title="Notification settings"
+    local:buttonText="Settings"
+    android:key="notification_settings"/>
+
+  <PreferenceCategory
+    android:title="Slack"
+    android:key="slack_notifications">
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="slack_notifications_enabled"
+      android:title="Amplify Slack"/>
+
+    <sam.notificationamp.preferences.CarRingtonePreference
+      android:defaultValue="content://settings/system/alarm_sound"
+      android:dependency="slack_notifications_enabled"
+      android:key="slack_notifications_ringtone"
+      android:ringtoneType="alarm"
+      android:title="Sound"/>
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:dependency="slack_notifications_enabled"
+      android:key="slack_notifications_vibrate"
+      android:title="Vibrate"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="Test"
+    android:key="test_notifications">
+
+    <sam.notificationamp.preferences.CarRingtonePreference
+      android:defaultValue="content://settings/system/alarm_sound"
+      android:key="test_notifications_ringtone"
+      android:showDefault="true"
+      android:ringtoneType="alarm"
+      android:title="Sound"/>
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="test_notifications_vibrate"
+      android:title="Vibrate"/>
+
+    <sam.notificationamp.preferences.ButtonPreference
+      android:title="Create test notification"
+      local:buttonText="Send"
+      android:key="test_notifications_button"/>
+  </PreferenceCategory>
+</PreferenceScreen>

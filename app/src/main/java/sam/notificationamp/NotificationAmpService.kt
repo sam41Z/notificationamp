@@ -4,20 +4,18 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.*
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.graphics.Color
-import android.media.AudioAttributes
-import android.media.MediaPlayer
-import android.media.RingtoneManager
 import android.os.PowerManager
 import android.preference.PreferenceManager
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import sam.notificationamp.utils.SharedPreferencesUtil
 import java.util.*
-import android.content.Intent
-
-
 
 
 class NotificationAmpService : NotificationListenerService() {
@@ -26,7 +24,9 @@ class NotificationAmpService : NotificationListenerService() {
     private val channelId = UUID.randomUUID().toString()
     private var slackEnabled = false
     private val ACTION_NOISE = "sam.notificationamp.ACTION_NOISE"
-    private val noiseService = NoiseService();
+    private val SLACK = "slack_notifications"
+    private val TEST = "test_notifications"
+    private val noiseService = NoiseService()
 
     override fun onCreate() {
         super.onCreate()
@@ -50,7 +50,7 @@ class NotificationAmpService : NotificationListenerService() {
     }
 
     private fun loadPrefs(prefs: SharedPreferences) {
-        slackEnabled = prefs.getBoolean("slack", false)
+        slackEnabled = SharedPreferencesUtil.isEnabled(SLACK, prefs)
     }
 
 
@@ -59,12 +59,12 @@ class NotificationAmpService : NotificationListenerService() {
         Log.i(TAG, "NEW NOTIFICATION from " + sbn.packageName + " " + sbn.id)
 
         if (sbn.packageName == "sam.notificationamp" && sbn.id == 2) {
-            createNotification()
+            createNotification(TEST)
         }
 
         if (sbn.packageName == "com.Slack" && slackEnabled) {
             Log.i(TAG, "Amplifying slack")
-            createNotification()
+            createNotification(SLACK)
         }
     }
 
@@ -79,7 +79,7 @@ class NotificationAmpService : NotificationListenerService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createNotification() {
+    private fun createNotification(key: String) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val stopIntent = Intent()
         stopIntent.action = ACTION_NOISE
@@ -98,6 +98,7 @@ class NotificationAmpService : NotificationListenerService() {
         val startIntent = Intent()
         startIntent.action = ACTION_NOISE
         startIntent.putExtra("command", "start")
+        startIntent.putExtra("key", key)
         sendBroadcast(startIntent)
         acquireWakeLock()
     }

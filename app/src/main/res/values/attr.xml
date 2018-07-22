@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="ButtonPreference">
+    <attr name="buttonText" format="string"/>
+    <attr name="buttonDrawableStart" format="reference"/>
+    <attr name="buttonDrawableTop" format="reference"/>
+    <attr name="buttonDrawableEnd" format="reference"/>
+    <attr name="buttonDrawableBottom" format="reference"/>
+  </declare-styleable>
+</resources>

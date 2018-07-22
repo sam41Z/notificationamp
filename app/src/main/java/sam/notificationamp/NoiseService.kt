@@ -6,51 +6,67 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.media.RingtoneManager
+import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.preference.PreferenceManager
+import sam.notificationamp.utils.SharedPreferencesUtil
 
 class NoiseService : BroadcastReceiver() {
 
     private var player = null as MediaPlayer?
     private var vibrator = null as Vibrator?
 
-    private fun startAlarm(context: Context?) {
-        if (player == null) {
-            val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+    private fun startAlarm(context: Context?, key: String?) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        if (player == null && key != null && SharedPreferencesUtil.isEnabled(key, prefs)) {
             val audioAttributes = AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
                     .build()
+
+            if (SharedPreferencesUtil.isVibrateEnabled(key, prefs)) {
+                vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator?.vibrate(VibrationEffect.createWaveform(longArrayOf(1500, 1500), 0), audioAttributes)
+            }
+
+            var ringtone = SharedPreferencesUtil.getRingtone(key, prefs)
+            if (ringtone == "") {
+                return
+            }
+
+            if (ringtone == "car_alarm") {
+                ringtone = "android.resource://${context?.packageName}/${R.raw.car_alarm}"
+            }
+            val uri = Uri.parse(ringtone)
             player = MediaPlayer()
             player?.setAudioAttributes(audioAttributes)
-            player?.setDataSource(uri.toString())
+            player?.setDataSource(context, uri)
             player?.isLooping = true
             player?.prepare()
-
-            vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            vibrator?.vibrate(VibrationEffect.createWaveform(longArrayOf(1500, 1500), 0), audioAttributes)
 
             player?.start()
         }
     }
 
     private fun stopAlarm() {
+
+        vibrator?.cancel()
+        vibrator = null
+
         if (player?.isPlaying == true) {
             player?.stop()
-            vibrator?.cancel()
-
             player?.release()
             player = null
-
-            vibrator = null
         }
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val command = intent?.getStringExtra("command")
+        val key = intent?.getStringExtra("key")
         if (command == "start") {
-            startAlarm(context)
+            startAlarm(context, key)
         } else if (command == "stop") {
             stopAlarm()
         }
