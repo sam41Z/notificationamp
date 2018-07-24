@@ -1,4 +1,4 @@
-package sam.notificationamp
+package sam.notificationamp.services
 
 
 import android.content.BroadcastReceiver
@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.preference.PreferenceManager
+import sam.notificationamp.R
 import sam.notificationamp.utils.SharedPreferencesUtil
 
 class NoiseService : BroadcastReceiver() {

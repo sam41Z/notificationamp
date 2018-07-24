@@ -1,4 +1,4 @@
-package sam.notificationamp
+package sam.notificationamp.activities
 
 import android.annotation.TargetApi
 import android.app.Notification
@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.preference.*
 import android.support.v4.app.NotificationManagerCompat
 import android.text.TextUtils
+import sam.notificationamp.R
 import java.util.*
 
 

@@ -1,4 +1,4 @@
-package sam.notificationamp
+package sam.notificationamp.services
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -14,6 +14,7 @@ import android.preference.PreferenceManager
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import sam.notificationamp.R
 import sam.notificationamp.utils.SharedPreferencesUtil
 import java.util.*
 
