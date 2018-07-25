@@ -18,21 +18,21 @@ class NoiseService : BroadcastReceiver() {
     private var player = null as MediaPlayer?
     private var vibrator = null as Vibrator?
 
-    private fun startAlarm(context: Context?, key: String?) {
+    private fun startAlarm(context: Context?, packageName: String?) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        if (player == null && key != null && SharedPreferencesUtil.isEnabled(key, prefs)) {
+        if (player == null && packageName != null && SharedPreferencesUtil.isEnabled(packageName, prefs)) {
             val audioAttributes = AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
                     .build()
 
-            if (SharedPreferencesUtil.isVibrateEnabled(key, prefs)) {
+            if (SharedPreferencesUtil.isVibrateEnabled(packageName, prefs)) {
                 vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 vibrator?.vibrate(VibrationEffect.createWaveform(longArrayOf(1500, 1500), 0), audioAttributes)
             }
 
-            var ringtone = SharedPreferencesUtil.getRingtone(key, prefs)
+            var ringtone = SharedPreferencesUtil.getRingtone(packageName, prefs)
             if (ringtone == "") {
                 return
             }
@@ -65,9 +65,9 @@ class NoiseService : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val command = intent?.getStringExtra("command")
-        val key = intent?.getStringExtra("key")
+        val packageName = intent?.getStringExtra("packageName")
         if (command == "start") {
-            startAlarm(context, key)
+            startAlarm(context, packageName)
         } else if (command == "stop") {
             stopAlarm()
         }

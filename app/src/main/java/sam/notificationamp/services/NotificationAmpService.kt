@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.PowerManager
 import android.preference.PreferenceManager
@@ -15,15 +16,15 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import sam.notificationamp.R
-import sam.notificationamp.utils.SharedPreferencesUtil
 import java.util.*
+import kotlin.collections.HashSet
 
 
 class NotificationAmpService : NotificationListenerService() {
 
     private val TAG = this.javaClass.simpleName
     private val channelId = UUID.randomUUID().toString()
-    private var slackEnabled = false
+    private var enabledPackages: Set<String> = HashSet()
     private val ACTION_NOISE = "sam.notificationamp.ACTION_NOISE"
     private val SLACK = "slack_notifications"
     private val TEST = "test_notifications"
@@ -51,7 +52,14 @@ class NotificationAmpService : NotificationListenerService() {
     }
 
     private fun loadPrefs(prefs: SharedPreferences) {
-        slackEnabled = SharedPreferencesUtil.isEnabled(SLACK, prefs)
+        val packages = HashSet<String>()
+        for (mutableEntry in prefs.all) {
+            val key = mutableEntry.key
+            if (key.endsWith("_enabled") && mutableEntry.value == true) {
+                packages.add(key.substring(0, key.length - 8))
+            }
+        }
+        enabledPackages = packages
     }
 
 
@@ -63,9 +71,9 @@ class NotificationAmpService : NotificationListenerService() {
             createNotification(TEST)
         }
 
-        if (sbn.packageName == "com.Slack" && slackEnabled) {
-            Log.i(TAG, "Amplifying slack")
-            createNotification(SLACK)
+        if (enabledPackages.contains(sbn.packageName)) {
+            Log.i(TAG, "Amplifying " + sbn.packageName)
+            createNotification(sbn.packageName)
         }
     }
 
@@ -80,16 +88,17 @@ class NotificationAmpService : NotificationListenerService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createNotification(key: String) {
+    private fun createNotification(packageName: String) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val stopIntent = Intent()
         stopIntent.action = ACTION_NOISE
         stopIntent.putExtra("command", "stop")
         val pendingStopIntent = PendingIntent.getBroadcast(baseContext, 0, stopIntent, 0)
 
+        val appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
         val notification = Notification.Builder(this@NotificationAmpService, channelId)
-                .setContentTitle("Alarm")
-                .setContentText("Alarm")
+                .setContentTitle(packageManager.getApplicationLabel(appInfo))
+                .setContentText("Got a new notification")
                 .setSmallIcon(R.drawable.ic_postauto_sign)
                 .setAutoCancel(true)
                 .setContentIntent(pendingStopIntent)
@@ -99,7 +108,7 @@ class NotificationAmpService : NotificationListenerService() {
         val startIntent = Intent()
         startIntent.action = ACTION_NOISE
         startIntent.putExtra("command", "start")
-        startIntent.putExtra("key", key)
+        startIntent.putExtra("packageName", packageName)
         sendBroadcast(startIntent)
         acquireWakeLock()
     }

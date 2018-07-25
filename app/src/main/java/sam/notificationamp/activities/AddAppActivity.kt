@@ -1,13 +1,16 @@
 package sam.notificationamp.activities
 
 import android.app.Activity
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_add_app.*
 import sam.notificationamp.R
 import sam.notificationamp.adapters.AppAdapter
 import sam.notificationamp.model.App
+import sam.notificationamp.utils.SharedPreferencesUtil
 
 
 class AddAppActivity : Activity() {
@@ -23,15 +26,16 @@ class AddAppActivity : Activity() {
         linearLayoutManager = LinearLayoutManager(this)
         appView.layoutManager = linearLayoutManager
 
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val packageManager = packageManager
         val packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
         val apps: ArrayList<App> = ArrayList()
         for (applicationInfo in packages) {
-            applicationInfo.permission
             val packageName = applicationInfo.packageName
             val name = packageManager.getApplicationLabel(applicationInfo)
             val icon = packageManager.getApplicationIcon(applicationInfo)
-            apps.add(App(packageName = packageName, name = name, icon = icon))
+            val enabled = SharedPreferencesUtil.isEnabled(packageName, prefs)
+            apps.add(App(packageName = packageName, name = name, icon = icon, enabled = enabled))
         }
         appAdapter = AppAdapter(apps)
         appView.adapter = appAdapter
