@@ -2,7 +2,6 @@ package sam.notificationamp.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.*
 import android.view.LayoutInflater
@@ -12,12 +11,11 @@ import kotlinx.android.synthetic.main.app_list_item.view.*
 import sam.notificationamp.R
 import sam.notificationamp.activities.AppSettingsActivity
 import sam.notificationamp.model.App
-import sam.notificationamp.utils.SharedPreferencesUtil
 
 
-class AppAdapter(private val apps: ArrayList<App>, private val prefs: SharedPreferences) : Adapter<AppAdapter.AppViewHolder>() {
+class AppAdapter(private val apps: ArrayList<App>) : Adapter<AppAdapter.AppViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
-        return AppViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.app_list_item, parent, false), prefs)
+        return AppViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.app_list_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -25,10 +23,10 @@ class AppAdapter(private val apps: ArrayList<App>, private val prefs: SharedPref
     }
 
     override fun onBindViewHolder(holder: AppViewHolder, position: Int) {
-        holder.bindApp(apps[position])
+        holder.bindApp(apps[position], position == 0, position == apps.size - 1)
     }
 
-    class AppViewHolder(private var context: Context, itemView: View, private val prefs: SharedPreferences) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class AppViewHolder(private var context: Context, itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private var view: View = itemView
         private var app: App? = null
 
@@ -36,12 +34,17 @@ class AppAdapter(private val apps: ArrayList<App>, private val prefs: SharedPref
             view.setOnClickListener(this)
         }
 
-        fun bindApp(app: App) {
+        fun bindApp(app: App, isStart: Boolean, isEnd: Boolean) {
             this.app = app
             view.appIcon.setImageDrawable(app.icon)
             view.appName.text = app.name
-            val enabled = SharedPreferencesUtil.isEnabled(app.packageName.toString(), prefs)
-            view.appEnabled.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
+            if (app.enabled) {
+                view.appStatus.setImageResource(R.drawable.ic_alarm_filled)
+            } else if (app.exists) {
+                view.appStatus.setImageResource(R.drawable.ic_alarm_outlined)
+            }
+            view.appStatus.visibility = if (app.exists) View.VISIBLE else View.INVISIBLE
+            view.divider.visibility = if (isEnd) View.INVISIBLE else View.VISIBLE
         }
 
 

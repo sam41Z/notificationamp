@@ -12,6 +12,9 @@ class SharedPreferencesUtil {
             return prefs.getBoolean(enabledKey(appPackage), false)
         }
 
+        fun exists(appPackage: String, prefs: SharedPreferences): Boolean {
+            return prefs.contains(enabledKey(appPackage))
+        }
         fun getRingtone(appPackage: String, prefs: SharedPreferences): String {
             return prefs.getString(ringtoneKey(appPackage), "")
         }

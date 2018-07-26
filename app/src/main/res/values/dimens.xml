@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="appItemHeight">72dp</dimen>
+  <dimen name="appItemIconSize">56dp</dimen>
+  <dimen name="appItemSmallIconSize">24dp</dimen>
+  <dimen name="appItemMarginLarge">24dp</dimen>
+  <dimen name="appItemMarginMedium">16dp</dimen>
+  <dimen name="appItemMarginSmall">8dp</dimen>
+  <dimen name="appItemDividerHeight">1dp</dimen>
+</resources>

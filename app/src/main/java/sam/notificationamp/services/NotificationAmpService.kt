@@ -26,19 +26,18 @@ class NotificationAmpService : NotificationListenerService() {
     private val channelId = UUID.randomUUID().toString()
     private var enabledPackages: Set<String> = HashSet()
     private val ACTION_NOISE = "sam.notificationamp.ACTION_NOISE"
-    private val SLACK = "slack_notifications"
-    private val TEST = "test_notifications"
     private val noiseService = NoiseService()
+    private val prefListener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs: SharedPreferences, _: String ->
+        Log.i(TAG, "Reloading prefs")
+        loadPrefs(prefs)
+    }
 
     override fun onCreate() {
         super.onCreate()
         createChannel()
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
-        prefs.registerOnSharedPreferenceChangeListener { prefs: SharedPreferences, _: String ->
-            Log.i(TAG, "Reloading prefs")
-            loadPrefs(prefs)
-        }
+        val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        prefs.registerOnSharedPreferenceChangeListener(prefListener)
         loadPrefs(prefs)
 
         var filter = IntentFilter()
@@ -67,11 +66,7 @@ class NotificationAmpService : NotificationListenerService() {
 
         Log.i(TAG, "NEW NOTIFICATION from " + sbn.packageName + " " + sbn.id)
 
-        if (sbn.packageName == "sam.notificationamp" && sbn.id == 2) {
-            createNotification(TEST)
-        }
-
-        if (enabledPackages.contains(sbn.packageName)) {
+        if (enabledPackages.contains(sbn.packageName) || (sbn.packageName == "sam.notificationamp" && sbn.id == 2)) {
             Log.i(TAG, "Amplifying " + sbn.packageName)
             createNotification(sbn.packageName)
         }

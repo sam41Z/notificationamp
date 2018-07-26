@@ -1,35 +1,28 @@
 package sam.notificationamp.activities
 
 import android.annotation.TargetApi
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.preference.*
-import android.support.v4.app.NotificationManagerCompat
-import android.text.TextUtils
-import android.view.View
 import sam.notificationamp.R
 import sam.notificationamp.preferences.CarRingtonePreference
 import sam.notificationamp.utils.SharedPreferencesUtil
-import java.util.*
 
 
 class AppSettingsActivity : PreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actionBar.setDisplayHomeAsUpEnabled(true)
 
         val appPackage = intent.getStringExtra("package")
         val appName = intent.getStringExtra("name")
 
+        actionBar.title = "Alarm settings"
 
         // Display the fragment as the main content.
-        val fragment = AmpPreferenceFragment()
+        val fragment = AppPreferenceFragment()
         fragment.arguments = Bundle().apply {
             putString("name", appName)
             putString("package", appPackage)
@@ -40,10 +33,9 @@ class AppSettingsActivity : PreferenceActivity() {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    class AmpPreferenceFragment : PreferenceFragment() {
+    class AppPreferenceFragment : PreferenceFragment() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            setHasOptionsMenu(false)
             addPreferencesFromResource(R.xml.app_preferences)
 
             val appName = arguments.getString("name")
