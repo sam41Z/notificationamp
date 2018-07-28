@@ -12,9 +12,14 @@ class SharedPreferencesUtil {
             return prefs.getBoolean(enabledKey(appPackage), false)
         }
 
-        fun exists(appPackage: String, prefs: SharedPreferences): Boolean {
-            return prefs.contains(enabledKey(appPackage))
+        fun wasEnabled(appPackage: String, prefs: SharedPreferences): Boolean {
+            return prefs.getLong(lastEnabledKey(appPackage), 0) > 0
         }
+
+        fun setLastEnabled(appPackage: String, prefs: SharedPreferences) {
+            prefs.edit().putLong(lastEnabledKey(appPackage), System.currentTimeMillis()).apply()
+        }
+
         fun getRingtone(appPackage: String, prefs: SharedPreferences): String {
             return prefs.getString(ringtoneKey(appPackage), "")
         }
@@ -23,15 +28,28 @@ class SharedPreferencesUtil {
             return prefs.getBoolean(vibrateKey(appPackage), false)
         }
 
-        fun enabledKey(appPackage: String) :String {
+        fun forgetAll(appPackage: String, prefs: SharedPreferences) {
+            prefs.edit()
+                    .remove(enabledKey(appPackage))
+                    .remove(ringtoneKey(appPackage))
+                    .remove(vibrateKey(appPackage))
+                    .remove(lastEnabledKey(appPackage))
+                    .apply()
+        }
+
+        fun enabledKey(appPackage: String): String {
             return "${appPackage}_enabled"
         }
 
-        fun ringtoneKey(appPackage: String) :String {
+        private fun lastEnabledKey(appPackage: String): String {
+            return "${appPackage}_lastEnabled"
+        }
+
+        fun ringtoneKey(appPackage: String): String {
             return "${appPackage}_ringtone"
         }
 
-        fun vibrateKey(appPackage: String) :String {
+        fun vibrateKey(appPackage: String): String {
             return "${appPackage}_vibrate"
         }
     }

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="appItemHeight">72dp</dimen>
+  <dimen name="appListItemHeight">72dp</dimen>
+  <dimen name="appGridItemHeight">104dp</dimen>
+  <dimen name="appGridItemWidth">88dp</dimen>
   <dimen name="appItemIconSize">56dp</dimen>
   <dimen name="appItemSmallIconSize">24dp</dimen>
+  <dimen name="appItemSmallIconElevation">5dp</dimen>
+  <dimen name="appItemSmallIconPadding">3dp</dimen>
+  <dimen name="appItemSmallIconMargin">12dp</dimen>
   <dimen name="appItemMarginLarge">24dp</dimen>
   <dimen name="appItemMarginMedium">16dp</dimen>
   <dimen name="appItemMarginSmall">8dp</dimen>

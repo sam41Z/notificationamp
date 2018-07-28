@@ -2,6 +2,7 @@ package sam.notificationamp.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.*
 import android.view.LayoutInflater
@@ -11,11 +12,11 @@ import kotlinx.android.synthetic.main.app_list_item.view.*
 import sam.notificationamp.R
 import sam.notificationamp.activities.AppSettingsActivity
 import sam.notificationamp.model.App
+import android.view.MotionEvent
 
-
-class AppAdapter(private val apps: ArrayList<App>) : Adapter<AppAdapter.AppViewHolder>() {
+class AppAdapter(private val apps: ArrayList<App>, private val itemLayoutId: Int) : Adapter<AppAdapter.AppViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
-        return AppViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.app_list_item, parent, false))
+        return AppViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(itemLayoutId, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -32,6 +33,14 @@ class AppAdapter(private val apps: ArrayList<App>) : Adapter<AppAdapter.AppViewH
 
         init {
             view.setOnClickListener(this)
+            view.setOnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    view.appIcon.setColorFilter(R.color.appIconTouch)
+                } else if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
+                    view.appIcon.setColorFilter(Color.TRANSPARENT)
+                }
+                false
+            }
         }
 
         fun bindApp(app: App, isStart: Boolean, isEnd: Boolean) {
@@ -46,7 +55,6 @@ class AppAdapter(private val apps: ArrayList<App>) : Adapter<AppAdapter.AppViewH
             view.appStatus.visibility = if (app.exists) View.VISIBLE else View.INVISIBLE
             view.divider.visibility = if (isEnd) View.INVISIBLE else View.VISIBLE
         }
-
 
         override fun onClick(v: View?) {
             val intent = Intent(context, AppSettingsActivity::class.java).apply {

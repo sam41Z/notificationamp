@@ -4,5 +4,5 @@
   <color name="colorPrimaryDark">#6ACCBA</color>
   <color name="colorAccent">#6ACCBA</color>
   <color name="colorText">#00120e</color>
-  <color name="lightGray">#b6b6b6</color>
+  <color name="appIconTouch">#05000000</color>
 </resources>

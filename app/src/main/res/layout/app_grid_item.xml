@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="horizontal"
+  android:layout_width="@dimen/appGridItemWidth"
+  android:layout_height="@dimen/appGridItemHeight">
+
+  <ImageView
+    android:id="@+id/appIcon"
+    android:layout_marginStart="@dimen/appItemMarginMedium"
+    android:layout_marginEnd="@dimen/appItemMarginMedium"
+    android:layout_marginTop="@dimen/appItemMarginMedium"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_width="@dimen/appItemIconSize"
+    android:layout_height="@dimen/appItemIconSize"/>
+
+    <ImageView
+      android:id="@+id/appStatus"
+      android:layout_width="@dimen/appItemSmallIconSize"
+      android:layout_height="@dimen/appItemSmallIconSize"
+      android:layout_marginTop="@dimen/appItemSmallIconMargin"
+      android:layout_marginEnd="@dimen/appItemSmallIconMargin"
+      android:padding="@dimen/appItemSmallIconPadding"
+      android:adjustViewBounds="false"
+      android:elevation="@dimen/appItemSmallIconElevation"
+      android:background="@drawable/ic_alarm_background"
+      android:src="@drawable/ic_alarm_filled"
+      android:tint="@android:color/white"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+  <TextView
+    android:id="@+id/appName"
+    app:layout_constraintTop_toBottomOf="@id/appIcon"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/appItemMarginSmall"
+    android:layout_marginEnd="@dimen/appItemMarginSmall"
+    android:maxLines="2"
+    android:ellipsize="marquee"
+    android:text="test"
+    android:textAlignment="center"
+    android:textSize="12sp"/>
+
+  <View
+    android:id="@+id/divider"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@android:color/transparent"
+    />
+</android.support.constraint.ConstraintLayout>

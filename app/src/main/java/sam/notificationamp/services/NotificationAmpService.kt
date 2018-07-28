@@ -16,6 +16,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import sam.notificationamp.R
+import sam.notificationamp.utils.SharedPreferencesUtil
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -79,6 +80,7 @@ class NotificationAmpService : NotificationListenerService() {
         channel.enableLights(true)
         channel.lightColor = Color.CYAN
         channel.setShowBadge(true)
+        channel.vibrationPattern = longArrayOf(0)
 
         notificationManager.createNotificationChannel(channel)
     }
@@ -105,13 +107,5 @@ class NotificationAmpService : NotificationListenerService() {
         startIntent.putExtra("command", "start")
         startIntent.putExtra("packageName", packageName)
         sendBroadcast(startIntent)
-        acquireWakeLock()
     }
-
-    private fun acquireWakeLock() {
-        val pm = getSystemService(Context.POWER_SERVICE) as? PowerManager
-        val wakeLock = pm?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG)
-        wakeLock?.acquire(6000L)
-    }
-
 }

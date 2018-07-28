@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.*
 import sam.notificationamp.R
+import sam.notificationamp.preferences.ButtonPreference
 import sam.notificationamp.preferences.CarRingtonePreference
 import sam.notificationamp.utils.SharedPreferencesUtil
 
@@ -38,6 +39,7 @@ class AppSettingsActivity : PreferenceActivity() {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.app_preferences)
 
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val appName = arguments.getString("name")
             val appPackage = arguments.getString("package")
 
@@ -65,13 +67,27 @@ class AppSettingsActivity : PreferenceActivity() {
             vibratePreference.setDefaultValue(true)
             category.addPreference(vibratePreference)
 
+            if (SharedPreferencesUtil.wasEnabled(appPackage, prefs)) {
+                val forgetPreference = ButtonPreference(context)
+                forgetPreference.title = "Forget settings of this app"
+                forgetPreference.buttonText = "Forget"
+                category.addPreference(forgetPreference)
+                forgetPreference.setOnPreferenceClickListener {
+                    SharedPreferencesUtil.forgetAll(appPackage, prefs)
+                    activity.finish()
+                    return@setOnPreferenceClickListener true
+                }
+            }
+
             enabledPreference.setOnPreferenceChangeListener { preference, newValue ->
                 val enabled = newValue.toString().toBoolean()
                 ringtonePreference.isEnabled = enabled
                 vibratePreference.isEnabled = enabled
+                if (enabled) {
+                    SharedPreferencesUtil.setLastEnabled(appPackage, prefs)
+                }
                 true
             }
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val value = prefs.getBoolean(enabledPreference.key, false)
             enabledPreference.onPreferenceChangeListener.onPreferenceChange(enabledPreference, value)
         }

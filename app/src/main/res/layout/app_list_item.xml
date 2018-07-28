@@ -7,7 +7,7 @@
   android:focusable="true"
   android:clickable="true"
   android:foreground="?android:attr/selectableItemBackground"
-  android:layout_height="@dimen/appItemHeight">
+  android:layout_height="@dimen/appListItemHeight">
 
   <ImageView
     android:layout_marginEnd="@dimen/appItemMarginMedium"
