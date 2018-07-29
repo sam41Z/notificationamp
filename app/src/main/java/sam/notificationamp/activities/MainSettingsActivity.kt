@@ -104,7 +104,7 @@ class MainSettingsActivity : PreferenceActivity() {
             val notification = Notification.Builder(activity, channelId)
                     .setContentTitle("Test")
                     .setContentText("Test")
-                    .setSmallIcon(R.drawable.ic_postauto_sign)
+                    .setSmallIcon(R.drawable.ic_speaker)
                     .setAutoCancel(true)
                     .build()
             notificationManager.notify(2, notification)

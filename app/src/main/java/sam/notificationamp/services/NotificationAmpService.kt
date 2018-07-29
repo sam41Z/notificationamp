@@ -96,7 +96,7 @@ class NotificationAmpService : NotificationListenerService() {
         val notification = Notification.Builder(this@NotificationAmpService, channelId)
                 .setContentTitle(packageManager.getApplicationLabel(appInfo))
                 .setContentText("Got a new notification")
-                .setSmallIcon(R.drawable.ic_postauto_sign)
+                .setSmallIcon(R.drawable.ic_speaker)
                 .setAutoCancel(true)
                 .setContentIntent(pendingStopIntent)
                 .setDeleteIntent(pendingStopIntent)

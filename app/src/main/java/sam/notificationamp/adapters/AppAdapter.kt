@@ -3,6 +3,7 @@ package sam.notificationamp.adapters
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.*
 import android.view.LayoutInflater
@@ -35,7 +36,7 @@ class AppAdapter(private val apps: ArrayList<App>, private val itemLayoutId: Int
             view.setOnClickListener(this)
             view.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
-                    view.appIcon.setColorFilter(R.color.appIconTouch)
+                    view.appIcon.setColorFilter(R.color.appIconTouch, PorterDuff.Mode.SRC_ATOP)
                 } else if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
                     view.appIcon.setColorFilter(Color.TRANSPARENT)
                 }
