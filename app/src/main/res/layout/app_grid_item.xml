@@ -26,7 +26,6 @@
       android:adjustViewBounds="false"
       android:elevation="@dimen/appItemSmallIconElevation"
       android:background="@drawable/ic_background_round"
-      android:src="@drawable/ic_alarm_filled"
       android:tint="@android:color/white"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>

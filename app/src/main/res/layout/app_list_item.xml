@@ -21,7 +21,6 @@
 
   <ImageView
     android:id="@+id/appStatus"
-    android:src="@drawable/ic_alarm_filled"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_marginTop="@dimen/appItemMarginLarge"

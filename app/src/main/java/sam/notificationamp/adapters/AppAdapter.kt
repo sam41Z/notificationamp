@@ -49,9 +49,11 @@ class AppAdapter(private val apps: ArrayList<App>, private val itemLayoutId: Int
             view.appIcon.setImageDrawable(app.icon)
             view.appName.text = app.name
             if (app.enabled) {
-                view.appStatus.setImageResource(R.drawable.ic_alarm_filled)
+                view.appStatus.setImageResource(R.drawable.ic_speaker)
+                view.appStatus.alpha = 1.0f
             } else if (app.exists) {
-                view.appStatus.setImageResource(R.drawable.ic_alarm_outlined)
+                view.appStatus.setImageResource(R.drawable.ic_speaker_disabled)
+                view.appStatus.alpha = 0.5f
             }
             view.appStatus.visibility = if (app.exists) View.VISIBLE else View.INVISIBLE
             view.divider.visibility = if (isEnd) View.INVISIBLE else View.VISIBLE
